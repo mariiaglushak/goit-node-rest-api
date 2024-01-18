@@ -3,15 +3,24 @@
 import {readFile,writeFile} from "fs/promises";
 import path from "path";
 
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const contactsPath = path.join(__dirname, "..", "db", "contacts5.json");
+
 // const path=require("node:path");
 // const crypto = require("node:crypto");
 
 import crypto from "crypto";
 
-
-
-const contactsPath=path.join("../db/contacts.json");
 console.log(contactsPath);
+
+
+// const contactsPath=path.join("../db/contacts.json");
+// console.log(contactsPath);
 
 
 
@@ -61,9 +70,11 @@ const addContact=async (contact)=> {
 }
 
 
-module.exports={
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact
-};
+// module.exports={
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact
+// };
+
+export {listContacts,getContactById,removeContact,addContact};
