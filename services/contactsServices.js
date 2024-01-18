@@ -1,5 +1,3 @@
-// const fs=require("node:fs/promises")
-
 import {readFile,writeFile} from "fs/promises";
 import path from "path";
 
@@ -9,28 +7,23 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const contactsPath = path.join(__dirname, "..", "db", "contacts5.json");
+const contactsPath = path.join(__dirname, "..", "db", "contacts.json");
 
-// const path=require("node:path");
-// const crypto = require("node:crypto");
 
 import crypto from "crypto";
 
 console.log(contactsPath);
 
 
-// const contactsPath=path.join("../db/contacts.json");
-// console.log(contactsPath);
 
 
-
-const listContacts=async() =>{
+export const listContacts=async() =>{
   const data= await readFile(contactsPath,{ encoding: "utf-8" });
   return JSON.parse(data);
   
 }
 
-const getContactById= async(contactId)=> {
+export const getContactById= async(contactId)=> {
   const contacts= await listContacts();
   const contact=contacts.find((contact) => contact.id === contactId);
 
@@ -39,7 +32,7 @@ const getContactById= async(contactId)=> {
 }
 
 
-const removeContact= async(contactId)=> {
+export const removeContact= async(contactId)=> {
   const contacts= await listContacts();
   const index= contacts.findIndex(contact=>contact.id===contactId);
 
@@ -56,7 +49,7 @@ const removeContact= async(contactId)=> {
 
 
 
-const addContact=async (contact)=> {
+export const addContact=async (contact)=> {
 
   const allContacts= await listContacts();
   const newContact= { id: crypto.randomUUID(), ...contact };
@@ -70,11 +63,17 @@ const addContact=async (contact)=> {
 }
 
 
-// module.exports={
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact
-// };
+export const updateContacts = async(id,body)=>{
 
-export {listContacts,getContactById,removeContact,addContact};
+  const contacts= await listContacts();
+  const contactIndex = contacts.findIndex((contact) => contact.id === id)
+  if (contactIndex === -1) {
+    return null
+  }
+  contacts[contactIndex] = { id, ...body }
+  await writeFile(contactsPath,JSON.stringify(contacts,undefined,2))
+
+  return contacts[contactIndex];
+
+}
+
