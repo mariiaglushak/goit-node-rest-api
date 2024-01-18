@@ -1,6 +1,6 @@
 // const fs=require("node:fs/promises")
 
-import fs from "fs/promises";
+import {readFile,writeFile} from "fs/promises";
 import path from "path";
 
 // const path=require("node:path");
@@ -16,7 +16,7 @@ console.log(contactsPath);
 
 
 const listContacts=async() =>{
-  const data= await fs.readFile(contactsPath,{ encoding: "utf-8" });
+  const data= await readFile(contactsPath,{ encoding: "utf-8" });
   return JSON.parse(data);
   
 }
@@ -38,7 +38,7 @@ const removeContact= async(contactId)=> {
     return null;
   } 
   const newContacts = [...contacts.slice(0, index), ...contacts.slice(index + 1)];
-  await fs.writeFile(contactsPath,JSON.stringify(newContacts,undefined,2));
+  await writeFile(contactsPath,JSON.stringify(newContacts,undefined,2));
 
   return contacts[index];
 
