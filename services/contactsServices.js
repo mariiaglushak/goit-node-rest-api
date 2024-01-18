@@ -1,10 +1,14 @@
-const fs=require("node:fs/promises");
+// const fs=require("node:fs/promises");
+import { promises } from "fs";
+import path from "path";
 
-const path=require("node:path");
-const crypto = require("node:crypto");
+// const path=require("node:path");
+// const crypto = require("node:crypto");
+
+import crypto from "crypto";
 
 
-const contactsPath=path.join(__dirname,"..","db","contacts.json");
+const contactsPath=path.join("../db/contacts.json");
 console.log(contactsPath);
 
 
