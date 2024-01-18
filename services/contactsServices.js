@@ -1,6 +1,6 @@
 // const fs=require("node:fs/promises")
 
-import fs from fs/promises;
+import fs from "fs/promises";
 import path from "path";
 
 // const path=require("node:path");
