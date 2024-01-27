@@ -11,6 +11,7 @@ import {
 import validateBody from "../helpers/validateBody.js";
 import { createContactSchema,updateFavoriteSchema } from "../shemas/contactsShemas.js";
 import { isValidId } from "../helpers/isValidId.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 
 
@@ -18,17 +19,17 @@ const contactsRouter = express.Router();
 const jsonParser = express.json();
 
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", authenticate, getAllContacts);
 
-contactsRouter.get("/:id",isValidId, getContactsById);
+contactsRouter.get("/:id",authenticate, isValidId, getContactsById);
 
-contactsRouter.delete("/:id",isValidId, deleteContact);
+contactsRouter.delete("/:id",authenticate,isValidId, deleteContact);
 
-contactsRouter.post("/",jsonParser, validateBody(createContactSchema),createContact);
+contactsRouter.post("/",authenticate ,jsonParser, validateBody(createContactSchema),createContact);
 
-contactsRouter.patch("/:id/favorite",jsonParser, isValidId, validateBody(updateFavoriteSchema),updateStatusContact)
+contactsRouter.patch("/:id/favorite",authenticate, jsonParser, isValidId, validateBody(updateFavoriteSchema),updateStatusContact)
 
-contactsRouter.put("/:id",jsonParser, isValidId, validateBody(createContactSchema),updateContact);
+contactsRouter.put("/:id",authenticate ,jsonParser, isValidId, validateBody(createContactSchema),updateContact);
 
 export default contactsRouter;
 
