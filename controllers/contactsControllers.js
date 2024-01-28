@@ -37,15 +37,9 @@ export const getContactsById = async(req,res,next)=>{
 export const deleteContact = async(req,res,next)=>{
   try{
     const { id } = req.params;
-    const userId = req.user.id;
-    const contact = await contactsModel.findById(id);
-     if (contact.owner.toString() !== userId) {
-      throw HttpError(404,res[404]);
-    }
-   
     const removedContact = await contactsModel.findByIdAndDelete(id);
     if (removedContact === null) {
-       return next(HttpError(404,res[404]));
+      next(HttpError(404,res[404]));
     };
   
     
@@ -78,13 +72,8 @@ export const updateContact = async(req,res,next)=>{
 
   try{
     const { id } = req.params;
-    const userId = req.user.id;
     const contact = await contactsModel.findById(id);
 
-     if (contact.owner.toString() !== userId) {
-      throw HttpError(404,res[404]);
-    }
-   
     const updatedContacts = await contactsModel.findByIdAndUpdate(id,req.body, {new :true});
     if(updatedContacts === null){
       throw HttpError(404,res[404]);

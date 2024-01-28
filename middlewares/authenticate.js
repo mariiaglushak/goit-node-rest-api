@@ -16,36 +16,29 @@ export const authenticate = async(req, res, next) => {
     return next(HttpError(401, "Not authorized"));
   }
 
- 
-
-
-  jsonwebtoken.verify(token, process.env.JWT_SECRET, async(err, decode) => {
+  jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decode) => {
     if (err) {
-      return next(HttpError(401, "Not authorized"));
+    return next(HttpError(401, "Not authorized"));
     }
-    
-
-    const user = await UsersModel.findById(decode.id);
-    if (user === null) {
-      return next(HttpError(401, "Not authorized"));
-    }
-
-    if (user.token !== token) {
-      return next(HttpError(401, "Not authorized"));
-    }
-    
-    
-    
-    req.user = {
-      id: decode.id,
-      email: user.email,
-      subscription: user.subscription,
-    };
-
-     next();
+    try {
+      const user = await UsersModel.findById(decode.id);
+        if (user === null) {
+          next(HttpError(401, "Not authorized"));
+        }
+        if (user.token !== token) {
+          next(HttpError(401, "Not authorized"));
+        }
+        
+        req.user = {
+          id: decode.id,
+          email: user.email,
+          subscription: user.subscription,
+        };
+  
+ 
+    }catch (err) {
+      next(err);
+    }; 
   });
-
- 
- 
   
 }
