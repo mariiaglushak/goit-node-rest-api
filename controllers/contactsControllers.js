@@ -74,7 +74,7 @@ export const updateContact = async(req,res,next)=>{
     const { id } = req.params;
     const contact = await contactsModel.findById(id);
 
-    const updatedContacts = await contactsModel.findByIdAndUpdate(id,req.body, {new :true});
+    const updatedContacts = await contactsModel.findByIdAndUpdate(id, req.body, {new :true});
     if(updatedContacts === null){
       throw HttpError(404,res[404]);
     }

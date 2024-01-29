@@ -16,12 +16,15 @@ export const authenticate = async(req, res, next) => {
     return next(HttpError(401, "Not authorized"));
   }
 
-  jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decode) => {
+  jsonwebtoken.verify(token, process.env.JWT_SECRET, async(err, decode) => {
     if (err) {
     return next(HttpError(401, "Not authorized"));
     }
     try {
       const user = await UsersModel.findById(decode.id);
+
+      console.log(decode.id);
+      
         if (user === null) {
           next(HttpError(401, "Not authorized"));
         }
@@ -39,6 +42,8 @@ export const authenticate = async(req, res, next) => {
     }catch (err) {
       next(err);
     }; 
+    next();
   });
+  
   
 }
