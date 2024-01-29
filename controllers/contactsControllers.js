@@ -3,7 +3,7 @@ import { contactsModel } from "../shemas/contactsShemas.js";
 
 
 
-export const getAllContacts = async (req, res, next) => {
+export const getAllContacts = async (req, res) => {
   const { id: owner } = req.user;
  
 
@@ -15,15 +15,12 @@ export const getAllContacts = async (req, res, next) => {
 export const getContactsById = async(req,res,next)=>{
   try{
     const { id } = req.params;
-    const userId = req.user.id;
     const contact= await contactsModel.findById(id);
     if(contact === null){
       throw HttpError(404,res[404]);
 
     };
-    if (contact.owner.toString() !== userId) {
-      throw HttpError(404,res[404]);
-    }
+    
     res.json(contact);
 
   }catch(error){
@@ -41,8 +38,7 @@ export const deleteContact = async(req,res,next)=>{
     if (removedContact === null) {
       next(HttpError(404,res[404]));
     };
-  
-    
+
     res.status(200).json({ message: "Contact deleted" });
     
   }catch{
@@ -72,8 +68,7 @@ export const updateContact = async(req,res,next)=>{
 
   try{
     const { id } = req.params;
-    const contact = await contactsModel.findById(id);
-
+  
     const updatedContacts = await contactsModel.findByIdAndUpdate(id, req.body, {new :true});
     if(updatedContacts === null){
       throw HttpError(404,res[404]);
