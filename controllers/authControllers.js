@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
+import gravatar from "gravatar";
 
 
 import { UsersModel } from "../shemas/usersShemas.js";
@@ -19,7 +20,8 @@ export const register=async(req,res,next)=>{
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = await UsersModel.create({ email, password: passwordHash, subscription });
+    const avatarURL = gravatar.url(email);
+    const newUser = await UsersModel.create({ email, password: passwordHash, subscription, avatarURL});
     
     const userResponse = { email: newUser.email, subscription: newUser.subscription };
     

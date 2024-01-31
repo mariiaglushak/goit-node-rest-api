@@ -4,8 +4,8 @@ import cors from "cors";
 import { config } from 'dotenv';
 import "./db/db.js";
 import authRouter from "./routes/authRouter.js";
-
 import contactsRouter from "./routes/contactsRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 
 
 config();
@@ -19,6 +19,9 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
+app.use("/avatars", express.static("public/avatars"));
+
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
