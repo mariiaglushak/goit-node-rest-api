@@ -22,8 +22,6 @@ export const authenticate = async(req, res, next) => {
     }
     try {
       const user = await UsersModel.findById(decode.id);
-
-      console.log(decode.id);
       
         if (user === null) {
           next(HttpError(401, "Not authorized"));
