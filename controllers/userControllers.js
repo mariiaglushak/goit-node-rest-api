@@ -77,7 +77,6 @@ export const verifyEmail = async (req, res, next) => {
 export const resendVerifyEmail = async (req, res, next) => {
   const { email } = req.body;
   try {
-    const verificationToken = uuidv4();
     const user = await UsersModel.findOne({ email });
     if (user === null) {
       throw HttpError(400);
