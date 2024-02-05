@@ -59,7 +59,7 @@ export const verifyEmail = async (req, res, next) => {
   try {
     const user = await UsersModel.findOne({ verificationToken });
     if (user === null) {
-      next(HttpError(404));
+      return next(HttpError(404, "User not found"));
     }
     await UsersModel.findByIdAndUpdate(user._id, {
       verify: true,
@@ -77,12 +77,14 @@ export const verifyEmail = async (req, res, next) => {
 export const resendVerifyEmail = async (req, res, next) => {
   const { email } = req.body;
   try {
+    const verificationToken = uuidv4();
     const user = await UsersModel.findOne({ email });
     if (user === null) {
-      next(HttpError(400));
+      throw HttpError(400);
     }
+
     if (user.verify) {
-      next(HttpError(400, "Verification has already been passed"));
+      throw HttpError(400, "Verification has already been passed");
     }
 
     await sendEmail({
@@ -114,7 +116,7 @@ export const login = async (req, res, next) => {
       throw HttpError(401, "Email or password is wrong");
     }
     if (user.verify === false) {
-      throw HttpError(404);
+      throw HttpError(401, "Not verified");
     }
 
     const token = jsonwebtoken.sign({ id: user._id }, process.env.JWT_SECRET, {
